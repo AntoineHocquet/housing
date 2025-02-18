@@ -36,7 +36,7 @@ def main():
     predicted_price = model.predict([[size]])
     st.success(f'Predicted price: ${predicted_price[0]:.2f}')
 
-    df = generate_house_data()
+    df = load_data()
     fig = px.scatter(df,x='size',y='price',title='Size vs house price')
     fig.add_scatter(x=[size],
                     y=[predicted_price[0]],
