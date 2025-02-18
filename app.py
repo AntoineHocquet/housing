@@ -6,14 +6,14 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 
-def generate_house_data(n_samples =100):
-  np.random.seed(42)
-  size=np.random.normal(1400,50,n_samples)
-  price = size * 50 + np.random.normal(0,50,n_samples)
-  return pd.DataFrame({'size':size,'price':price})
+def load_data():
+    url = "drive/MyDrive/data/USA_housing_data.csv"  # file inside GitHub repo
+    df = pd.read_csv(url)
+    df['size']=df['sqft_living'] + df['sqft_lot'] + df['sqft_above'] + df['sqft_basement']
+    return df
 
 def train_model():
-  df = generate_house_data()
+  df = load_data()
   X=df[['size']]
   y=df['price']
   X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2)
