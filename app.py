@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 
 def load_data():
-    url = "USA_housing_data.csv"  # file inside GitHub repo
+    url = "USA_housing_dataset.csv"  # file inside GitHub repo
     df = pd.read_csv(url)
     df['size']=df['sqft_living'] + df['sqft_lot'] + df['sqft_above'] + df['sqft_basement']
     return df
