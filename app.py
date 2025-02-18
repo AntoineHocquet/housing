@@ -9,15 +9,15 @@ from sklearn.metrics import mean_squared_error
 # Load data
 def load_data():
   """Load data from real housing dataset"""
-    url = "USA_housing_dataset.csv"  # file inside GitHub repo
-    df = pd.read_csv(url)
-    df['size']=df['sqft_living'] + df['sqft_lot'] + df['sqft_above'] + df['sqft_basement']
-    return df
+  url = "USA_housing_dataset.csv" # file inside GitHub repo
+  df = pd.read_csv(url)
+  df['size']=df['sqft_living'] + df['sqft_lot'] + df['sqft_above'] + df['sqft_basement']
+  return df
 
 def preprocess_data(df):
-    """Select relevant columns and clean data"""
-    df = df[['size', 'price']].dropna()  # Keep only size & price columns
-    return df
+  """Select relevant columns and clean data"""
+  df = df[['size', 'price']].dropna()  # Keep only size & price columns
+  return df
 
 def train_model(df):
   """Train a linear regression model"""
