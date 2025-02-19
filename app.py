@@ -16,8 +16,12 @@ def load_data():
   return df
 
 def preprocess_data(df):
-  """Select relevant columns and clean data"""
+  """Select relevant columns, clean data & convert units"""
   df = df[['size', 'bedrooms', 'price']].dropna()
+  
+  # conversion factor
+  SQFT_TO_M2 = 0.092903
+  df[['size']]= df[['size']]*SQFT_TO_M2
   return df
 
 def train_model(df, features):
@@ -46,7 +50,7 @@ def main():
     min_value=float(df['size'].min()),
     max_value=float(df['size'].max()),
     value=float(df['size'].median()),
-    step=float(100)
+    step=float(10)
   )
 
   bedrooms = st.number_input(
