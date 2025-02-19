@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 
 # Load data
+@st.cache_data
 def load_data():
   """Load data from real housing dataset"""
   url = "USA_housing_dataset.csv" # file inside GitHub repo
