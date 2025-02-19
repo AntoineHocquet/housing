@@ -47,10 +47,11 @@ def main():
     max_value=df['size'].max(),
     value=df['size'].median()
   )
+
   bedrooms = st.number_input(
     'Number of bedrooms',
     min_value=df['bedrooms'].min(),
-    max_value=df['bedrooms'].min(),
+    max_value=df['bedrooms'].max(),
     value=df['bedrooms'].median()
   )
 
@@ -59,11 +60,14 @@ def main():
   model1 = train_model(df,['size'])
   model2 = train_model(df,['size','bedrooms'])
 
+  # initialize empty figure
+  fig = None
+
   # prediction with size only
   with col1:
     if st.button('Using size only'):
       predicted_price = model1.predict([[size]])[0]
-      st.success(f'Predicted price based on size: ${predicted_price[0]:.2f}')
+      st.success(f'Predicted price based on size: ${predicted_price:.2f}')
 
     # 2d scatter plot
     fig = px.scatter(
@@ -73,7 +77,7 @@ def main():
       title='Size vs house price'
     )
 
-    # add prediction
+    # add prediction marker
     fig.add_scatter(
       x=[size],
       y=[predicted_price],
@@ -109,8 +113,9 @@ def main():
           z='price'
         ).data[0].update(marker=dict(color='red', size=10)))
 
-  # display graph
-  st.plotly_chart(fig)
+  # display graph (only if fig is created)
+  if fig:
+    st.plotly_chart(fig)
 
 
 if __name__ == '__main__':
