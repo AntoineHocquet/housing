@@ -17,12 +17,12 @@ def load_data():
 
 def preprocess_data(df):
   """Select relevant columns and clean data"""
-  df = df[['size', 'price']].dropna()  # Keep only size & price columns
+  df = df[['size', 'bedrooms', 'price']].dropna()
   return df
 
-def train_model(df):
-  """Train a linear regression model"""
-  X=df[['size']]
+def train_model(df, features):
+  """Train a linear regression model with selected features"""
+  X=df[features]
   y=df['price']
   X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2)
 
@@ -32,32 +32,86 @@ def train_model(df):
   return model
 
 def main():
-  st.title('House Price Prediction App')
+  st.title("House Price Prediction App (based on Kaggle's USA housing dataset)")
 
-  st.write("Put in your house size to predict its price (based on USA housing dataset)")
+  st.write("Put in house details to predict its price")
 
-  #load and preprocess data
+  # load and preprocess data
   df=load_data()
   df=preprocess_data(df)
-  model = train_model(df)
 
-  size = st.number_input('House size', min_value=500, max_value=5000, value=1500)
+  # user input fields
+  size = st.number_input(
+    'House size',
+    min_value=df['size'].min(),
+    max_value=df['size'].max(),
+    value=df['size'].median()
+  )
+  bedrooms = st.number_input(
+    'Number of bedrooms',
+    min_value=df['bedrooms'].min(),
+    max_value=df['bedrooms'].min(),
+    value=df['bedrooms'].median()
+  )
 
-  if st.button('Predict price'):
-    predicted_price = model.predict([[size]])
-    st.success(f'Predicted price: ${predicted_price[0]:.2f}')
+  col1, col2 =st.columns(2)
 
+  model1 = train_model(df,['size'])
+  model2 = train_model(df,['size','bedrooms'])
 
-    fig = px.scatter(df,x='size',y='price',title='Size vs house price')
+  # prediction with size only
+  with col1:
+    if st.button('Using size only'):
+      predicted_price = model1.predict([[size]])[0]
+      st.success(f'Predicted price based on size: ${predicted_price[0]:.2f}')
+
+    # 2d scatter plot
+    fig = px.scatter(
+      df,
+      x='size',
+      y='price',
+      title='Size vs house price'
+    )
+
+    # add prediction
     fig.add_scatter(
       x=[size],
-      y=[predicted_price[0]],
+      y=[predicted_price],
       mode='markers',
-      marker=dict(color='red',size=15),
+      marker=dict(color='red',size=10),
       name='Predicted Price'
     )
 
-    st.plotly_chart(fig)
+
+  # prediction with size and bedrooms
+  with col2:
+    if st.button('Using size and bedrooms'):
+      predicted_price = model2.predict([[size,bedrooms]])[0]
+      st.success(f'Predicted price based on size and bedrooms: ${predicted_price:,.2f}')
+
+      # 3d scatter plot
+      fig = px.scatter_3d(
+        df,
+        x='size',
+        y='bedrooms',
+        z='price',
+        title='House Prices in 3D',
+        labels={'size': 'Size (sqft)', 'bedrooms': 'Bedrooms', 'price': 'Price'},
+        opacity=0.7
+      )
+
+      # Add predicted point in red
+      fig.add_trace(
+        px.scatter_3d(
+          pd.DataFrame({'size': [size], 'bedrooms': [bedrooms], 'price': [predicted_price]}),
+          x='size',
+          y='bedrooms',
+          z='price'
+        ).data[0].update(marker=dict(color='red', size=10)))
+
+  # display graph
+  st.plotly_chart(fig)
+
 
 if __name__ == '__main__':
   main()
