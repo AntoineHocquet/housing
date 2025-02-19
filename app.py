@@ -40,8 +40,8 @@ def train_model(df, features):
   return model
 
 def main():
-  st.title("House Price Prediction App (based on Kaggle's USA housing dataset)")
-
+  st.title("House Price Prediction App")
+  st.write("(based on Kaggle's 2014 USA housing dataset)\n")
   st.write("Put in house details to predict its price")
 
   # load and preprocess data
