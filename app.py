@@ -19,8 +19,10 @@ def preprocess_data(df):
   """Select relevant columns, clean data & convert units"""
   # drop NA values
   df = df[['size', 'bedrooms', 'price']].dropna()
-  # eliminate size outliers (last quantile)
-  df=df[df['size']<df['size'].quantile(0.85)]
+  # eliminate outliers
+  QUANT=0.85
+  df=df[df['size']<df['size'].quantile(QUANT)]
+  df=df[df['price']<df['price'].quantile(QUANT)]
   # conversion factor
   SQFT_TO_M2 = 0.092903
   df[['size']]= df[['size']]*SQFT_TO_M2
