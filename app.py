@@ -45,14 +45,16 @@ def main():
     'House size',
     min_value=float(df['size'].min()),
     max_value=float(df['size'].max()),
-    value=float(df['size'].median())
+    value=float(df['size'].median()),
+    step=100
   )
 
   bedrooms = st.number_input(
     'Number of bedrooms',
     min_value=float(df['bedrooms'].min()),
     max_value=float(df['bedrooms'].max()),
-    value=float(df['bedrooms'].median())
+    value=float(df['bedrooms'].median()),
+    step=0.5
   )
 
   col1, col2 =st.columns(2)
