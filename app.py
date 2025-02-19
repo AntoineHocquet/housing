@@ -60,7 +60,7 @@ def main():
   model1 = train_model(df,['size'])
   model2 = train_model(df,['size','bedrooms'])
 
-  # initialize empty figure
+  # initialize values
   fig = None
 
   # prediction with size only
@@ -70,21 +70,21 @@ def main():
       st.success(f'Predicted price based on size: ${predicted_price:.2f}')
 
     # 2d scatter plot
-    fig = px.scatter(
-      df,
-      x='size',
-      y='price',
-      title='Size vs house price'
-    )
+      fig = px.scatter(
+        df,
+        x='size',
+        y='price',
+        title='Size vs house price'
+      )
 
     # add prediction marker
-    fig.add_scatter(
-      x=[size],
-      y=[predicted_price],
-      mode='markers',
-      marker=dict(color='red',size=10),
-      name='Predicted Price'
-    )
+      fig.add_scatter(
+        x=[size],
+        y=[predicted_price],
+        mode='markers',
+        marker=dict(color='red',size=10),
+        name='Predicted Price'
+      )
 
 
   # prediction with size and bedrooms
