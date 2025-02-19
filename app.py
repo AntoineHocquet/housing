@@ -12,7 +12,7 @@ def load_data():
   """Load data from real housing dataset"""
   url = "USA_housing_dataset.csv" # file inside GitHub repo
   df = pd.read_csv(url)
-  df['size']=df['sqft_living'] + df['sqft_lot'] + df['sqft_above'] + df['sqft_basement']
+  df['size']=df['sqft_living'] # + df['sqft_lot'] + df['sqft_above'] + df['sqft_basement']
   return df
 
 def preprocess_data(df):
@@ -46,7 +46,7 @@ def main():
 
   # user input fields
   size = st.number_input(
-    'House size',
+    'House size in m^2',
     min_value=float(df['size'].min()),
     max_value=float(df['size'].max()),
     value=float(df['size'].median()),
